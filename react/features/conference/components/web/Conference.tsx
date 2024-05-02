@@ -41,6 +41,9 @@ import type { AbstractProps } from '../AbstractConference';
 import ConferenceInfo from './ConferenceInfo';
 import { default as Notice } from './Notice';
 
+import KeywordResponder from './KeywordResponder';
+import { isLocalParticipantModerator } from '../../../base/participants/functions';
+
 /**
  * DOM events for when full screen mode has changed. Different browsers need
  * different vendor prefixes.
@@ -99,6 +102,8 @@ interface IProps extends AbstractProps, WithTranslation {
      * If prejoin page is visible or not.
      */
     _showPrejoin: boolean;
+
+    _isModerator: boolean;
 
     dispatch: IStore['dispatch'];
 }
@@ -206,6 +211,7 @@ class Conference extends AbstractConference<IProps, any> {
             _overflowDrawer,
             _showLobby,
             _showPrejoin,
+            _isModerator,
             t
         } = this.props;
 
@@ -244,6 +250,9 @@ class Conference extends AbstractConference<IProps, any> {
                                 role = 'heading'>
                                 { t('toolbar.accessibilityLabel.heading') }
                             </span>
+                            {
+                                _isModerator && <KeywordResponder/>
+                            }
                             <Toolbox />
                         </>
                     )}
@@ -262,6 +271,7 @@ class Conference extends AbstractConference<IProps, any> {
                 </div>
                 <ParticipantsPane />
                 <ReactionAnimations />
+                <KeywordResponder/>
             </div>
         );
     }
@@ -402,7 +412,8 @@ function _mapStateToProps(state: IReduxState) {
         _overflowDrawer: overflowDrawer,
         _roomName: getConferenceNameForTitle(state),
         _showLobby: getIsLobbyVisible(state),
-        _showPrejoin: isPrejoinPageVisible(state)
+        _showPrejoin: isPrejoinPageVisible(state),
+        _isModerator: isLocalParticipantModerator(state)
     };
 }
 
