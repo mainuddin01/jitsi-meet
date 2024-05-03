@@ -271,7 +271,7 @@ class Conference extends AbstractConference<IProps, any> {
                 </div>
                 <ParticipantsPane />
                 <ReactionAnimations />
-                <KeywordResponder/>
+                {/* <KeywordResponder/> */}
             </div>
         );
     }

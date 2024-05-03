@@ -1,6 +1,6 @@
 import React, { useRef } from 'react';
 
-const keywords = [
+const keywords: string[] = [
     "fox",
     "bird",
     "cat",
@@ -11,7 +11,7 @@ const keywords = [
     "tiger"
 ];
 
-const animalImages = [
+const animalImages: string[] = [
     "./images/animals/fox.png",
     "./images/animals/bird.png",
     "./images/animals/cat.png",
@@ -22,16 +22,18 @@ const animalImages = [
     "./images/animals/tiger.png"
 ];
 
-function KeywordResponder(props) {
+interface KeywordResponderProps {}
 
-    const dreamCanvasRef = useRef(null);
+const KeywordResponder: React.FC<KeywordResponderProps> = (props) => {
 
-    var sound = new Audio('../../../../../sounds/reactions-thumbs-up.mp3');
+    const dreamCanvasRef = useRef<HTMLDivElement>(null);
+
+    const sound = new Audio('../../../../../sounds/reactions-thumbs-up.mp3');
 
     let recognitionStarted = false;
 
     // Create a new SpeechRecognition object
-    const recognition = new window.webkitSpeechRecognition() || new window.SpeechRecognition();
+    const recognition = new ((window as any).webkitSpeechRecognition || (window as any).SpeechRecognition)();
 
     // Set properties for recognition
     recognition.lang = 'en-US'; // Set the language
@@ -47,7 +49,7 @@ function KeywordResponder(props) {
     }
 
     // Event listener for result event
-    recognition.onresult = function(event) {
+    recognition.onresult = function(event: any) {
         const lastResultIndex = event.results.length - 1;
         const lastTranscript = event.results[lastResultIndex][0].transcript;
         const words = lastTranscript.split(' ');
@@ -59,7 +61,7 @@ function KeywordResponder(props) {
             lastSpokenWord = newLastWord; // Update the last spoken word
             const keywordIndex = keywords.indexOf(newLastWord.toLowerCase());
             if (keywordIndex !== -1) {
-                if (dreamCanvasRef.current.firstChild) {
+                if (dreamCanvasRef.current?.firstChild) {
                     dreamCanvasRef.current.innerHTML = "";
                 }
                 const img = document.createElement('img');
@@ -67,7 +69,7 @@ function KeywordResponder(props) {
                 img.src = animalImages[keywordIndex];
                 img.classList.add("custom-image");
                 // Prepend the image to the dreamCanvas div
-                dreamCanvasRef.current.prepend(img);
+                dreamCanvasRef.current?.prepend(img);
                 // Trigger reflow to apply transition
                 img.offsetWidth; // This line forces the browser to reflow, allowing the transition to take effect
                 function playAudio() {
@@ -81,29 +83,8 @@ function KeywordResponder(props) {
         }            
     };
 
-    // Event listener for when speech is recognized
-    // recognition.onresult = (event) => {
-    //     const transcript = Array.from(event.results)
-    //         .map(result => result[0].transcript)
-    //         .join('');
-
-    //         if (keywords.some(key => transcript.toLowerCase().includes(key))) {
-    //             const img = document.createElement('img');
-    //             img.src = './images/logo-deep-linking.png';
-    //             // Prepend the image to the dreamCanvas div
-    //             dreamCanvasRef.current.prepend(img);
-    //         }
-
-    //         if (transcript.toLowerCase().includes('hello')) {
-    //             console.log('HOLA!');
-    //         } else {
-    //         console.log(`Transcript: ${transcript}`)
-    //     }
-
-    // };
-
     // Event listener for errors
-    recognition.onerror = (event) => {
+    recognition.onerror = (event: any) => {
         console.error('Speech recognition error:', event.error);
     };
 
@@ -128,95 +109,6 @@ function KeywordResponder(props) {
             recognition.stop();
             speechBtn?.classList.remove("speech-btn");
         }
-
-    }
-
-    const handlePress = () => {
-        if (dreamCanvasRef.current.firstChild) {
-            dreamCanvasRef.current.innerHTML = "";
-        }
-        const img = document.createElement('img');
-        img.src = './images/logo-deep-linking.png';
-        img.classList.add("custom-image");
-        // Prepend the image to the dreamCanvas div
-        dreamCanvasRef.current.prepend(img);
-        // Trigger reflow to apply transition
-        img.offsetWidth; // This line forces the browser to reflow, allowing the transition to take effect
-        function playAudio() {
-            if (!sound.paused) {
-                sound.currentTime = 0;
-            }
-            sound.play();
-        }
-        playAudio();
-    }
-
-    const handleClick = () => {
-
-        // Create a new SpeechRecognition object
-        const recognition = new window.webkitSpeechRecognition() || new window.SpeechRecognition();
-
-        // Set properties for recognition
-        recognition.lang = 'en-US'; // Set the language
-        recognition.continuous = true; // Keep listening for speech
-        recognition.interimResults = true; // Get interim results
-        recognition.maxAlternatives = 1;
-
-        // Variable to store the last spoken word
-        let lastSpokenWord = '';
-
-        // Event listener for result event
-        recognition.onresult = function(event) {
-            const lastResultIndex = event.results.length - 1;
-            const lastTranscript = event.results[lastResultIndex][0].transcript;
-            const words = lastTranscript.split(' ');
-            const newLastWord = words[words.length - 1];
-
-            // Check if the new last word is different from the last spoken word
-            if (newLastWord !== lastSpokenWord) {
-                console.log('Last spoken word:', newLastWord);
-                lastSpokenWord = newLastWord; // Update the last spoken word
-                if (keywords.includes(newLastWord.toLowerCase())) {
-                    const img = document.createElement('img');
-                    img.src = './images/logo-deep-linking.png';
-                    // Prepend the image to the dreamCanvas div
-                    dreamCanvasRef.current.prepend(img);
-                }
-            }            
-        };
-
-        // Event listener for when speech is recognized
-        // recognition.onresult = (event) => {
-        //     const transcript = Array.from(event.results)
-        //         .map(result => result[0].transcript)
-        //         .join('');
-
-        //         if (keywords.some(key => transcript.toLowerCase().includes(key))) {
-        //             const img = document.createElement('img');
-        //             img.src = './images/logo-deep-linking.png';
-        //             // Prepend the image to the dreamCanvas div
-        //             dreamCanvasRef.current.prepend(img);
-        //         }
-
-        //         if (transcript.toLowerCase().includes('hello')) {
-        //             console.log('HOLA!');
-        //         } else {
-        //         console.log(`Transcript: ${transcript}`)
-        //     }
-
-        // };
-
-        // Event listener for errors
-        recognition.onerror = (event) => {
-            console.error('Speech recognition error:', event.error);
-        };
-
-        // Event listener for when the speech recognition is ended
-        recognition.onend = () => {
-            console.log('Speech recognition ended');
-        };
-
-        recognition.start();
 
     }
 
