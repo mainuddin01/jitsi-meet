@@ -158,8 +158,8 @@ const KeywordResponder: React.FC<KeywordResponderProps> = (props) => {
                     }
                 `}
             </style>
-            <div style={{position: "absolute", left: "2%", right: "2%", top: 20, borderRadius: "5px", textAlign: "center", backgroundColor: "rgba(255, 255, 255, 0.4)", color: "white", padding: "10px", margin: "20px", fontSize: "20px"}}><p>{`For testing please start speech recognition by pressing the button below and try to include any of these keyword while you're speaking: ${keywords.map((keyword, index) => ` ${keyword.toUpperCase()}`)}`}</p></div>
-            <div ref={dreamCanvasRef} style={{width: "100%", height: "100%", position: "absolute", zIndex: 100}}/>
+            <div style={{position: "absolute", left: "2%", right: "2%", top: 20, borderRadius: "5px", textAlign: "center", backgroundColor: "rgba(255, 255, 255, 0.4)", color: "white", padding: "10px", margin: "20px", fontSize: "20px", zIndex: 100}}><p>{`For testing please start speech recognition by pressing the button below and try to include any of these keyword while you're speaking: ${keywords.map((keyword, index) => ` ${keyword.toUpperCase()}`)}`}</p></div>
+            <div ref={dreamCanvasRef} style={{width: "100%", height: "100%", position: "absolute", zIndex: 100, top: 0, left: 0}}/>
             <button className='speech-element' style={{
                 color: "red",
                 width: 100,
