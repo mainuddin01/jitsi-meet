@@ -34,6 +34,17 @@ const KeywordResponder: React.FC<KeywordResponderProps> = (props) => {
 
     // Create a new SpeechRecognition object
     const recognition = new ((window as any).webkitSpeechRecognition || (window as any).SpeechRecognition)();
+    
+    const SpeechGrammarList = (window as any).SpeechGrammarList || (window as any).webkitSpeechGrammarList;
+
+    if (SpeechGrammarList) {
+        // SpeechGrammarList is not currently available in Safari, and does not have any effect in any other browser.
+        const speechRecognitionList = new SpeechGrammarList();
+        const grammar = '#JSGF V1.0; grammar keywords; public <keyword> = ' + keywords.join(' | ') + ' ;';
+        speechRecognitionList.addFromString(grammar, 1);
+        recognition.grammars = speechRecognitionList;
+    }
+    
 
     // Set properties for recognition
     recognition.lang = 'en-US'; // Set the language
@@ -158,7 +169,12 @@ const KeywordResponder: React.FC<KeywordResponderProps> = (props) => {
                     }
                 `}
             </style>
-            <div style={{position: "absolute", left: "2%", right: "2%", top: 20, borderRadius: "5px", textAlign: "center", backgroundColor: "rgba(255, 255, 255, 0.4)", color: "white", padding: "10px", margin: "20px", fontSize: "20px", zIndex: 100}}><p>{`For testing please start speech recognition by pressing the button below and try to include any of these keyword while you're speaking: ${keywords.map((keyword, index) => ` ${keyword.toUpperCase()}`)}`}</p></div>
+            <div style={{position: "absolute", left: "2%", right: "2%", top: 45, borderRadius: "5px", textAlign: "center", backgroundColor: "rgba(0, 0, 0, 0.6)", color: "white", padding: "10px", margin: "20px", fontSize: "20px", zIndex: 100}}>
+            <p>
+                For testing please start speech recognition by pressing the bottom right button and try to include any of these keyword while you're speaking: 
+                {keywords.map((keyword, index) => <strong style={{color: "cyan"}} key={index}> {keyword.toUpperCase()}{index === (keywords.length - 1) ? "" : ","}</strong>)}
+            </p>
+            </div>
             <div ref={dreamCanvasRef} style={{width: "100%", height: "100%", position: "absolute", zIndex: 100, top: 0, left: 0}}/>
             <button className='speech-element' style={{
                 color: "red",
