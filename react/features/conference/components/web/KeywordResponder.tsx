@@ -35,15 +35,15 @@ const KeywordResponder: React.FC<KeywordResponderProps> = (props) => {
     // Create a new SpeechRecognition object
     const recognition = new ((window as any).webkitSpeechRecognition || (window as any).SpeechRecognition)();
     
-    const SpeechGrammarList = (window as any).SpeechGrammarList || (window as any).webkitSpeechGrammarList;
+    // const SpeechGrammarList = (window as any).SpeechGrammarList || (window as any).webkitSpeechGrammarList;
 
-    if (SpeechGrammarList) {
-        // SpeechGrammarList is not currently available in Safari, and does not have any effect in any other browser.
-        const speechRecognitionList = new SpeechGrammarList();
-        const grammar = '#JSGF V1.0; grammar keywords; public <keyword> = ' + keywords.join(' | ') + ' ;';
-        speechRecognitionList.addFromString(grammar, 1);
-        recognition.grammars = speechRecognitionList;
-    }
+    // if (SpeechGrammarList) {
+    //     // SpeechGrammarList is not currently available in Safari, and does not have any effect in any other browser.
+    //     const speechRecognitionList = new SpeechGrammarList();
+    //     const grammar = '#JSGF V1.0; grammar keywords; public <keyword> = ' + keywords.join(' | ') + ' ;';
+    //     speechRecognitionList.addFromString(grammar, 1);
+    //     recognition.grammars = speechRecognitionList;
+    // }
     
 
     // Set properties for recognition
@@ -57,6 +57,10 @@ const KeywordResponder: React.FC<KeywordResponderProps> = (props) => {
     recognition.onstart = function() {
         console.log('Speech recognition started...');
         recognitionStarted = true;
+    }
+
+    recognition.onnomatch = function() {
+        console.log('No match found....');
     }
 
     // Event listener for result event
