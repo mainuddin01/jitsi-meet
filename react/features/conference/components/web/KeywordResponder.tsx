@@ -12,14 +12,14 @@ const keywords: string[] = [
 ];
 
 const animalImages: string[] = [
-    "./images/animals/fox.png",
-    "./images/animals/bird.png",
-    "./images/animals/cat.png",
-    "./images/animals/hen.png",
-    "./images/animals/fish.png",
-    "./images/animals/frog.png",
-    "./images/animals/monkey.png",
-    "./images/animals/tiger.png"
+    "./images/fox.png",
+    "./images/bird.png",
+    "./images/cat.png",
+    "./images/hen.png",
+    "./images/fish.png",
+    "./images/frog.png",
+    "./images/monkey.png",
+    "./images/tiger.png"
 ];
 
 interface KeywordResponderProps {}
