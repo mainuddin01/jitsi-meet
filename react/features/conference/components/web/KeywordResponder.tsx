@@ -221,7 +221,7 @@ const KeywordResponder: React.FC<KeywordResponderProps> = (props) => {
             </p>
             </div>
             <div ref={dreamCanvasRef} style={{width: "100%", height: "100%", position: "absolute", zIndex: 100, top: 0, left: 0}}/>
-            <canvas id="canvas" style={{width: "100%", height: "100%", position: "absolute", zIndex: 110, top: 0, left: 0}}></canvas>
+            <canvas id="canvas" style={{width: "100%", height: "100%", position: "absolute", top: 0, left: 0}}></canvas>
             <button className='speech-element' style={{
                 color: "red",
                 width: 100,
