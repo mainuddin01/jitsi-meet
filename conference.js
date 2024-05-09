@@ -1335,8 +1335,6 @@ export default {
     useVideoStream(newTrack) {
         logger.debug(`useVideoStream: ${newTrack}`);
 
-        console.log(`VIDEO TRACK OBJECT MAINUDDIN: `, newTrack);
-
         return new Promise((resolve, reject) => {
             _replaceLocalVideoTrackQueue.enqueue(onFinish => {
                 const state = APP.store.getState();
@@ -2085,14 +2083,7 @@ export default {
         .then(stream => {
             logger.info(`Switching the local video device to ${cameraDeviceId}.`);
 
-            let canvasStream;
-    const canvas = document.getElementById('canvas');
-
-    canvasStream = canvas.captureStream(30); // 30 fps
-      const videoTrack = canvasStream.getVideoTracks()[0];
-
-            // return this.useVideoStream(stream);
-            return this.useVideoStream(videoTrack);
+            return this.useVideoStream(stream);
         })
         .catch(error => {
             logger.error(`Failed to switch to selected camera:${cameraDeviceId}, error:${error}`);

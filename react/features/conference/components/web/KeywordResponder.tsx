@@ -2,6 +2,10 @@ import React, { useRef, useEffect } from 'react';
 
 import { bootstrapCameraKit } from '@snap/camera-kit';
 
+import conference from '../../../../../conference';
+
+import JitsiMeetJS from '../../../base/lib-jitsi-meet';
+
 const keywords: string[] = [
     "fox",
     "bird",
@@ -154,6 +158,23 @@ const KeywordResponder: React.FC<KeywordResponderProps> = (props) => {
           );
         
           await session.applyLens(lens);
+
+          let canvasStream;
+    const canvas = document.getElementById('canvas');
+
+    canvasStream = canvas.captureStream(30); // 30 fps
+      const videoTrack = canvasStream.getVideoTracks()[0];
+
+    // Create a new Jitsi Meet video track object
+    const jitsiVideoTrack = await JitsiMeetJS.createLocalTracks({
+        devices: [ 'video' ],
+        stream: videoTrack
+      });
+
+      console.log("VIDEO TRACK MAINUDDIN: ", jitsiVideoTrack[0]);
+
+          conference.useVideoStream(videoTrack[0]);
+          
     }
 
 
