@@ -1,4 +1,6 @@
-import React, { useRef } from 'react';
+import React, { useRef, useEffect } from 'react';
+
+import { bootstrapCameraKit } from '@snap/camera-kit';
 
 const keywords: string[] = [
     "fox",
@@ -127,6 +129,45 @@ const KeywordResponder: React.FC<KeywordResponderProps> = (props) => {
 
     }
 
+
+
+
+
+    const applyFilters = async () => {
+        const cameraKit = await bootstrapCameraKit({
+            apiToken: 'eyJhbGciOiJIUzI1NiIsImtpZCI6IkNhbnZhc1MyU0hNQUNQcm9kIiwidHlwIjoiSldUIn0.eyJhdWQiOiJjYW52YXMtY2FudmFzYXBpIiwiaXNzIjoiY2FudmFzLXMyc3Rva2VuIiwibmJmIjoxNzE1MTkyMTQ0LCJzdWIiOiI1ODFiMDc4MS0zYzMyLTRiYTYtOGJlYy0yODI0ZTA3OTgyMTR-U1RBR0lOR342OTY5NTk1Mi05YmJhLTQzNzItYTBiMy0xNDQ4OWU2M2FkZTYifQ.-U6n1Sjm61UqcoeY7D4Xk3IRwdC6Ja5rrxhrIWMSpDE',
+          });
+          const liveRenderTarget = document.getElementById(
+            'canvas'
+          ) as HTMLCanvasElement;
+          const session = await cameraKit.createSession({ liveRenderTarget });
+          const mediaStream = await navigator.mediaDevices.getUserMedia({
+            video: true,
+          });
+        
+          await session.setSource(mediaStream);
+          await session.play();
+        
+          const lens = await cameraKit.lensRepository.loadLens(
+            '43309500875',
+            '094af563-fca4-42a0-850b-2bd77125c5dc'
+          );
+        
+          await session.applyLens(lens);
+    }
+
+
+    useEffect(() => {
+
+        applyFilters();
+
+    }, []);
+
+
+
+
+
+
     return (
         <>
             <style>
@@ -180,6 +221,7 @@ const KeywordResponder: React.FC<KeywordResponderProps> = (props) => {
             </p>
             </div>
             <div ref={dreamCanvasRef} style={{width: "100%", height: "100%", position: "absolute", zIndex: 100, top: 0, left: 0}}/>
+            <canvas id="canvas" style={{width: "100%", height: "100%", position: "absolute", zIndex: 110, top: 0, left: 0}}></canvas>
             <button className='speech-element' style={{
                 color: "red",
                 width: 100,
