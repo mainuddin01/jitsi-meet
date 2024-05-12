@@ -1,3 +1,4 @@
+/* global APP */
 import React, { useRef, useEffect } from 'react';
 
 import { bootstrapCameraKit } from '@snap/camera-kit';
@@ -5,6 +6,7 @@ import { bootstrapCameraKit } from '@snap/camera-kit';
 import conference from '../../../../../conference';
 
 import JitsiMeetJS from '../../../base/lib-jitsi-meet';
+import { IJitsiConference } from '../../../base/conference/reducer';
 
 const keywords: string[] = [
     "fox",
@@ -28,7 +30,10 @@ const animalImages: string[] = [
     "./images/tiger.png"
 ];
 
-interface KeywordResponderProps {}
+interface KeywordResponderProps {
+    conference: IJitsiConference;
+    // other props if any
+  }
 
 const KeywordResponder: React.FC<KeywordResponderProps> = (props) => {
 
@@ -159,21 +164,27 @@ const KeywordResponder: React.FC<KeywordResponderProps> = (props) => {
         
           await session.applyLens(lens);
 
-          let canvasStream;
-    const canvas = document.getElementById('canvas');
+const canvas = document.getElementById('canvas') as HTMLCanvasElement;
 
-    canvasStream = canvas.captureStream(30); // 30 fps
-      const videoTrack = canvasStream.getVideoTracks()[0];
+const canvasStream = canvas.captureStream(30); // 30 fps
+const videoTrack = canvasStream.getVideoTracks()[0];
 
-    // Create a new Jitsi Meet video track object
-    const jitsiVideoTrack = await JitsiMeetJS.createLocalTracks({
-        devices: [ 'video' ],
-        stream: videoTrack
-      });
+// Create a new Jitsi Meet video track object
+const jitsiVideoTrack = await JitsiMeetJS.createLocalTracks({
+  devices: ['video'],
+  stream: {...videoTrack, active: true}
+});
 
-      console.log("VIDEO TRACK MAINUDDIN: ", jitsiVideoTrack[0]);
+console.log("VIDEO TRACK MAINUDDIN: ", jitsiVideoTrack[0]);
 
-          conference.useVideoStream(videoTrack[0]);
+// Assuming `conference` is initialized somewhere and `useVideoStream` method exists
+conference.useVideoStream(jitsiVideoTrack[0]);
+
+// if (props.conference && jitsiVideoTrack.length > 0) {
+//     // props.conference.addTrack(jitsiVideoTrack[0]);
+//     props.conference.replaceTrack(jitsiVideoTrack[0])
+//   }
+  
           
     }
 

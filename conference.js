@@ -1350,9 +1350,18 @@ export default {
                 }
 
                 // Add the track to the conference if there is no existing track, replace it otherwise.
-                const trackAction = oldTrack
-                    ? replaceLocalTrack(oldTrack, newTrack, room)
-                    : addLocalTrack(newTrack);
+                // const trackAction = oldTrack
+                //     ? replaceLocalTrack(oldTrack, newTrack, room)
+                //     : addLocalTrack(newTrack);
+
+                let trackAction;
+                if (oldTrack) {
+                    console.log("MAINUDDIN FOUND OLD TRACK: ", newTrack);
+                    trackAction = replaceLocalTrack(oldTrack, newTrack, room);
+                } else {
+                    console.log("MAINUDDIN FOUND NEW TRACK: ", newTrack);
+                    trackAction = addLocalTrack(newTrack);
+                }
 
                 APP.store.dispatch(trackAction)
                     .then(() => {
