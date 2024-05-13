@@ -3,10 +3,11 @@ import React, { useRef, useEffect } from 'react';
 
 import { bootstrapCameraKit } from '@snap/camera-kit';
 
+// @ts-ignore
 import conference from '../../../../../conference';
 
 import JitsiMeetJS from '../../../base/lib-jitsi-meet';
-import { IJitsiConference } from '../../../base/conference/reducer';
+// import { IJitsiConference } from '../../../base/conference/reducer';
 
 const keywords: string[] = [
     "fox",
@@ -31,7 +32,7 @@ const animalImages: string[] = [
 ];
 
 interface KeywordResponderProps {
-    conference: IJitsiConference;
+    // conference: IJitsiConference;
     // other props if any
   }
 
