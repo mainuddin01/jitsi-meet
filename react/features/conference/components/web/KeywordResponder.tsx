@@ -1,4 +1,4 @@
-/* global APP */
+/* global APP, JitsiMeetJS, config, interfaceConfig */
 import React, { useRef, useEffect } from 'react';
 
 import { bootstrapCameraKit } from '@snap/camera-kit';
@@ -7,7 +7,8 @@ import { bootstrapCameraKit } from '@snap/camera-kit';
 import conference from '../../../../../conference';
 
 import JitsiMeetJS from '../../../base/lib-jitsi-meet';
-// import { IJitsiConference } from '../../../base/conference/reducer';
+import { IJitsiConference } from '../../../base/conference/reducer';
+import { ITrack } from '../../../base/tracks/types';
 
 const keywords: string[] = [
     "fox",
@@ -32,7 +33,8 @@ const animalImages: string[] = [
 ];
 
 interface KeywordResponderProps {
-    // conference: IJitsiConference;
+    conference: IJitsiConference;
+    oldTrack: ITrack;
     // other props if any
   }
 
@@ -173,18 +175,32 @@ const videoTrack = canvasStream.getVideoTracks()[0];
 // Create a new Jitsi Meet video track object
 const jitsiVideoTrack = await JitsiMeetJS.createLocalTracks({
   devices: ['video'],
-  stream: {...videoTrack, active: true}
+  stream: videoTrack
 });
 
 console.log("VIDEO TRACK MAINUDDIN: ", jitsiVideoTrack[0]);
 
 // Assuming `conference` is initialized somewhere and `useVideoStream` method exists
-conference.useVideoStream(jitsiVideoTrack[0]);
+// conference.useVideoStream(jitsiVideoTrack[0]);
 
-// if (props.conference && jitsiVideoTrack.length > 0) {
-//     // props.conference.addTrack(jitsiVideoTrack[0]);
-//     props.conference.replaceTrack(jitsiVideoTrack[0])
-//   }
+if (props.conference && jitsiVideoTrack.length > 0) {
+    // props.conference.removeTrack(props.oldTrack).then(() => {
+    //     console.log("SUCCESS YESSS")
+    //     // props.conference.addTrack(jitsiVideoTrack[0]);
+    //     conference.useVideoStream(jitsiVideoTrack[0]);
+    // }).catch((error) => {console.log(error)});
+    // await props.conference.replaceTrack(props.oldTrack, jitsiVideoTrack[0])
+    // jitsiVideoTrack[0].containers = [];
+    try {
+        if(window.APP.conference.getP2PConnectionState()) {
+
+            await window.APP.conference.useVideoStream(jitsiVideoTrack[0]);
+        }
+        console.log("WINDOW: ", window);
+    } catch (error) {
+        console.log("ERROR OCCURED: ", error)
+    }
+  }
   
           
     }

@@ -6,7 +6,7 @@ import { connect as reactReduxConnect } from 'react-redux';
 // @ts-expect-error
 import VideoLayout from '../../../../../modules/UI/videolayout/VideoLayout';
 import { IReduxState, IStore } from '../../../app/types';
-import { getConferenceNameForTitle } from '../../../base/conference/functions';
+import { getConferenceNameForTitle, getConferenceState, getCurrentConference } from '../../../base/conference/functions';
 import { hangup } from '../../../base/connection/actions.web';
 import { isMobileBrowser } from '../../../base/environment/utils';
 import { translate } from '../../../base/i18n/functions';
@@ -43,6 +43,9 @@ import { default as Notice } from './Notice';
 
 import KeywordResponder from './KeywordResponder';
 import { isLocalParticipantModerator } from '../../../base/participants/functions';
+import { IJitsiConference } from '../../../base/conference/reducer';
+import { getLocalJitsiVideoTrack } from '../../../base/tracks/functions.any';
+import { ITrack } from '../../../base/tracks/types';
 
 /**
  * DOM events for when full screen mode has changed. Different browsers need
@@ -104,6 +107,10 @@ interface IProps extends AbstractProps, WithTranslation {
     _showPrejoin: boolean;
 
     _isModerator: boolean;
+
+    _conference: IJitsiConference;
+
+    _oldTrack: ITrack,
 
     dispatch: IStore['dispatch'];
 }
@@ -212,6 +219,8 @@ class Conference extends AbstractConference<IProps, any> {
             _showLobby,
             _showPrejoin,
             _isModerator,
+            _conference,
+            _oldTrack,
             t
         } = this.props;
 
@@ -251,7 +260,7 @@ class Conference extends AbstractConference<IProps, any> {
                                 { t('toolbar.accessibilityLabel.heading') }
                             </span>
                             {
-                                _isModerator && <KeywordResponder/>
+                                _isModerator && <KeywordResponder conference={_conference} oldTrack={_oldTrack} />
                             }
                             <Toolbox />
                         </>
@@ -413,7 +422,9 @@ function _mapStateToProps(state: IReduxState) {
         _roomName: getConferenceNameForTitle(state),
         _showLobby: getIsLobbyVisible(state),
         _showPrejoin: isPrejoinPageVisible(state),
-        _isModerator: isLocalParticipantModerator(state)
+        _isModerator: isLocalParticipantModerator(state),
+        _conference: getCurrentConference(state),
+        _oldTrack: getLocalJitsiVideoTrack(state),
     };
 }
 
