@@ -258,16 +258,20 @@ console.log("VIDEO TRACK MAINUDDIN: ", jitsiVideoTrack[0]);
                           transform: scale(1.1); /* Change the scale value for desired effect */
                         }
                     }
+
                 `}
             </style>
-            <div style={{position: "absolute", left: "2%", right: "2%", top: 45, borderRadius: "5px", textAlign: "center", backgroundColor: "rgba(0, 0, 0, 0.6)", color: "white", padding: "10px", margin: "20px", fontSize: "20px", zIndex: 100}}>
+            {/* <div style={{position: "absolute", left: "2%", right: "2%", top: 45, borderRadius: "5px", textAlign: "center", backgroundColor: "rgba(0, 0, 0, 0.6)", color: "white", padding: "10px", margin: "20px", fontSize: "20px", zIndex: 100}}> */}
+            <div style={{position: "absolute", left: "2%", right: "2%", top: 45, borderRadius: "5px", textAlign: "center", backgroundColor: "rgba(0, 0, 0, 0.6)", color: "white", padding: "10px", margin: "20px", fontSize: "20px", zIndex: 0, display: "none"}}>
             <p>
                 For testing please start speech recognition by pressing the bottom right button and try to include any of these keyword while you're speaking: 
                 {keywords.map((keyword, index) => <strong style={{color: "cyan"}} key={index}> {keyword.toUpperCase()}{index === (keywords.length - 1) ? "" : ","}</strong>)}
             </p>
             </div>
-            <div ref={dreamCanvasRef} style={{width: "100%", height: "100%", position: "absolute", zIndex: 100, top: 0, left: 0}}/>
-            <canvas id="canvas" style={{width: "100%", height: "100%", position: "absolute", top: 0, left: 0}}></canvas>
+            {/* <div ref={dreamCanvasRef} style={{width: "100%", height: "100%", position: "absolute", zIndex: 100, top: 0, left: 0}}/> */}
+            {/* <canvas id="canvas" style={{width: "100%", height: "100%", position: "absolute", top: 0, left: 0}}></canvas> */}
+            <div ref={dreamCanvasRef} style={{width: "100%", height: "100%", position: "absolute", zIndex: 0, top: 0, left: 0, display: "none"}}/>
+            <canvas id="canvas" style={{width: "30%", zIndex: 10, position: "absolute", top: 0, left: 0}}></canvas>
             <button className='speech-element' style={{
                 color: "red",
                 width: 100,
@@ -280,7 +284,10 @@ console.log("VIDEO TRACK MAINUDDIN: ", jitsiVideoTrack[0]);
                 padding: 0,
                 overflow: "hidden",
                 borderRadius: "10px",
-                border: "1px solid rebeccapurple"}}
+                border: "1px solid rebeccapurple",
+                // unnecessary code added by mainuddin
+                display: "none"
+            }}
                 onClick={handleSpeech}
             ><img style={{width: "100%"}} src='./images/speech_recognition_btn.jpg' /></button>
         </>
