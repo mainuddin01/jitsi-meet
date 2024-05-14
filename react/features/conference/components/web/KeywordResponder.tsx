@@ -7,8 +7,6 @@ import { bootstrapCameraKit } from '@snap/camera-kit';
 import conference from '../../../../../conference';
 
 import JitsiMeetJS from '../../../base/lib-jitsi-meet';
-import { IJitsiConference } from '../../../base/conference/reducer';
-import { ITrack } from '../../../base/tracks/types';
 
 const keywords: string[] = [
     "fox",
@@ -33,8 +31,6 @@ const animalImages: string[] = [
 ];
 
 interface KeywordResponderProps {
-    conference: IJitsiConference;
-    oldTrack: ITrack;
     // other props if any
   }
 
@@ -183,7 +179,8 @@ console.log("VIDEO TRACK MAINUDDIN: ", jitsiVideoTrack[0]);
 // Assuming `conference` is initialized somewhere and `useVideoStream` method exists
 // conference.useVideoStream(jitsiVideoTrack[0]);
 
-if (props.conference && jitsiVideoTrack.length > 0) {
+// if (props.conference && jitsiVideoTrack.length > 0) {
+    if ((window as any).APP.conference && jitsiVideoTrack.length > 0) {
     // props.conference.removeTrack(props.oldTrack).then(() => {
     //     console.log("SUCCESS YESSS")
     //     // props.conference.addTrack(jitsiVideoTrack[0]);
@@ -192,11 +189,11 @@ if (props.conference && jitsiVideoTrack.length > 0) {
     // await props.conference.replaceTrack(props.oldTrack, jitsiVideoTrack[0])
     // jitsiVideoTrack[0].containers = [];
     try {
-        if(window.APP.conference.getP2PConnectionState()) {
+        if((window as any)?.APP?.conference?.getP2PConnectionState()) {
 
-            await window.APP.conference.useVideoStream(jitsiVideoTrack[0]);
+            await (window as any)?.APP?.conference?.useVideoStream(jitsiVideoTrack[0]);
         }
-        console.log("WINDOW: ", window);
+        // console.log("WINDOW: ", window);
     } catch (error) {
         console.log("ERROR OCCURED: ", error)
     }
